@@ -62,8 +62,8 @@ class Auto: LinearOpMode() {
             }
             override fun onError(errorCode: Int) {}
         })
-        //todo /*** build paths**/
-        /** detect apriltags to get parking spot**/
+
+
         while(!opModeIsActive() && !isStopRequested) {
             // Calling getDetectionsUpdate() will only return an object if there was a new frame
             // processed since the last time we called it. Otherwise, it will return null. This
