@@ -7,6 +7,12 @@ import org.firstinspires.ftc.teamcode.utilities.DriveConstants.HoldingPower
 import org.firstinspires.ftc.teamcode.utilities.DriveConstants.SlidesTolerance
 import kotlin.math.abs
 
+
+/**
+ * A class for controlling the slides of the robot.
+ * @param motor The slides motor.
+ */
+
 class Slides(private val motor: DcMotorEx) {
     var state = State.STOPPED
 
@@ -19,45 +25,75 @@ class Slides(private val motor: DcMotorEx) {
         MOVING, STOPPED
     }
 
+    /**
+     * Slides run mode.
+     *
+     * Default: **RUN_USING_ENCODER**
+     */
     var mode: DcMotor.RunMode
         get() = motor.mode
         set(value) {
             motor.mode = value
         }
 
+    /**
+     * Slides motor power
+     */
     var power: Double
         get() = motor.power
         set(value) {
             motor.power = value
         }
 
+    /**
+     * Slides zeroPowerBehavier
+     *
+     * Default: **BRAKE**
+     */
     var zeroPowerBehavior: DcMotor.ZeroPowerBehavior
         get() = motor.zeroPowerBehavior
         set(value) {
             motor.zeroPowerBehavior = value
         }
 
+    /**
+     * Slides current Position
+     */
     val currentPosition: Double
         get() = motor.currentPosition.toDouble()
 
+    /**
+     * Slides current velocity
+     */
     val currentVelocity: Double
         get() = motor.velocity
 
+    /**
+     * Slides target position
+     */
     var targetPosition = 0
 
+    /**
+     * Stops the slides.
+     */
     fun stop(){
         motor.power = HoldingPower
         state = State.STOPPED
     }
 
+    /**
+     * Moves the slides to a target position.
+     * @param targetPosition The target position.
+     */
     fun goTo(position: Int) {
         state = State.MOVING
         motor.targetPosition = position
-        motor.mode = DcMotor.RunMode.RUN_TO_POSITION
-        motor.power = 0.5
-
+        update()
     }
 
+    /**
+     * Updates the slides depending on the state.
+     */
     fun update(){
         when (state) {
             State.MOVING -> {
@@ -69,7 +105,7 @@ class Slides(private val motor: DcMotorEx) {
                 stop()
             }
             State.STOPPED -> {
-                motor.power = 0.0
+                power = HoldingPower
             }
         }
     }

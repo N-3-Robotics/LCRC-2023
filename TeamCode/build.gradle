@@ -31,8 +31,10 @@ repositories {
 dependencies {
     implementation 'com.github.Eeshwar-Krishnan:PhotonFTC:v2.0.4'
     implementation 'org.openftc:easyopencv:1.5.3'
+    implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+
 
     implementation project(':FtcRobotController')
-    implementation 'androidx.core:core-ktx:+'
+    implementation 'androidx.core:core-ktx:1.9.0'
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 }

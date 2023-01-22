@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.utilities.math
 
-import com.acmerobotics.roadrunner.geometry.Vector2d
-import com.acmerobotics.roadrunner.path.Path
+import org.firstinspires.ftc.teamcode.utilities.geometry.Vector2d
+import org.firstinspires.ftc.teamcode.utilities.path.Path
 import kotlin.math.sign
 
 /**
@@ -15,9 +15,9 @@ import kotlin.math.sign
  * @param errorMapFunc custom error mapping (see eq. (4))
  */
 class GuidingVectorField(
-    private val path: Path,
-    private val kN: Double,
-    private val errorMapFunc: (Double) -> Double = { it }
+        private val path: Path,
+        private val kN: Double,
+        private val errorMapFunc: (Double) -> Double = { it }
 ) {
 
     /**
