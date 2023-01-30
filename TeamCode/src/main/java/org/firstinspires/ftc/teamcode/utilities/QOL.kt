@@ -121,36 +121,13 @@ object DriveConstants{
     var strafeMultiplier = 1.1 // multiplier
 
     @JvmField
-    var AutoDriveTolerance = 50 // tick
+    var AutoDriveTolerance = 50 // inches
 
     @JvmField
-    var AutoTurnTolerance = 0.25 // degree
+    var AutoTurnTolerance = 0.25 // degrees
 
     @JvmField
-    var SlidesTolerance = 50 // tick
-
-    @JvmField
-    var ClawOpen = 0.52
-
-    @JvmField
-    var ClawClose = 0.6
-
-    var SlidesSpeed = 1.0
-
-    var SlidesMax = 5359
-
-    var SlidesMin = 0
-
-    var highPole = SlidesMax
-
-    var midPole = SlidesMax / 3 * 2
-
-    var lowPole = SlidesMax / 3
-
-    var slightRaise = 300
-
-    @JvmField
-    var HoldingPower = 0.0001
+    var SlidesTolerance = 50 // ticks
 }
 
 // create an enum class where each value is a double that represents the strength of the rumble
