@@ -46,8 +46,6 @@ class Robot(hwMap: HardwareMap?) {
 
     var IMU: BNO055IMU
 
-
-
     val trackWidth = 12.0
     val wheelBase = 8.5
     val lateralMultiplier = 1.1
