@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robot
 
 import com.acmerobotics.robomatic.util.PIDController
 import com.qualcomm.hardware.bosch.BNO055IMU
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.*
 import org.firstinspires.ftc.teamcode.robot.kinematics.MecanumKinematics
 import org.firstinspires.ftc.teamcode.utilities.AutoMode.*
@@ -34,7 +35,7 @@ import kotlin.math.abs
  *
  * @param hwMap The hardware map of the robot
  */
-class Robot(hwMap: HardwareMap?) {
+class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
 
     // Hardware Components
     var FL: DcMotorEx
@@ -43,6 +44,10 @@ class Robot(hwMap: HardwareMap?) {
     var BR: DcMotorEx
 
     var driveMotors: Array<DcMotorEx>
+
+    var LAUNCHER: Component
+
+    var components: Array<Component>
 
     var IMU: BNO055IMU
 
@@ -350,6 +355,14 @@ class Robot(hwMap: HardwareMap?) {
         BR = hardwareMap!!.get(DcMotorEx::class.java, "BR")
 
         driveMotors = arrayOf(FL, FR, BL, BR)
+
+
+
+        LAUNCHER = Launcher(hardwareMap!!.get(DcMotorEx::class.java, "LAUNCHER"))
+
+        components = arrayOf(LAUNCHER)
+
+
 
         IMU = hardwareMap!!.get(BNO055IMU::class.java, "imu")
 
