@@ -5,24 +5,17 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.outoftheboxrobotics.photoncore.PhotonCore
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.robot.Robot
+import org.firstinspires.ftc.teamcode.robot.N3Robot
 import org.firstinspires.ftc.teamcode.utilities.*
-import kotlin.math.abs
 
 @TeleOp(name = "TeleOp")
 class TeleOP: LinearOpMode() {
     override fun runOpMode() {
-
-        PhotonCore.enable()
-
         val timer = ElapsedTime()
         telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry)
 
-
-
-        val ROBOT = Robot(hardwareMap)
+        val ROBOT = N3Robot(this)
 
         var m = 1.0
 
@@ -33,6 +26,9 @@ class TeleOP: LinearOpMode() {
 
         waitForStart()
 
+
+
+
         while (opModeIsActive()){
             telemetry.addData("Loop Time", timer.milliseconds())
             timer.reset()
@@ -40,10 +36,10 @@ class TeleOP: LinearOpMode() {
 
 
             // Drivetrain Control
-            ROBOT.gamepadDrive(gamepad1, m)
+            ROBOT.gamepadDrive(m)
 
             telemetry.addData("Robot Pose", ROBOT.currentPose.toString())
-            telemetry.update()
+            ROBOT.update()
         }
 
         

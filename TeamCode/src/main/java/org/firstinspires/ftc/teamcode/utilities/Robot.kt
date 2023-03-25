@@ -1,10 +1,11 @@
 @file:Suppress("unused", "NAME_SHADOWING")
-package org.firstinspires.ftc.teamcode.robot
+package org.firstinspires.ftc.teamcode.utilities
 
 import com.acmerobotics.robomatic.util.PIDController
 import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.*
+import org.firstinspires.ftc.teamcode.robot.MecanumLocaliser
 import org.firstinspires.ftc.teamcode.robot.kinematics.MecanumKinematics
 import org.firstinspires.ftc.teamcode.utilities.AutoMode.*
 import org.firstinspires.ftc.teamcode.utilities.DriveConstants.AutoDriveTolerance
@@ -21,8 +22,6 @@ import org.firstinspires.ftc.teamcode.utilities.DriveConstants.turn_kI
 import org.firstinspires.ftc.teamcode.utilities.DriveConstants.turn_kP
 import org.firstinspires.ftc.teamcode.utilities.QOL.Companion.radToDeg
 import org.firstinspires.ftc.teamcode.utilities.QOL.Companion.ticksToInches
-import org.firstinspires.ftc.teamcode.utilities.RumbleStrength
-import org.firstinspires.ftc.teamcode.utilities.Side
 import org.firstinspires.ftc.teamcode.utilities.geometry.Pose2d
 import org.firstinspires.ftc.teamcode.utilities.geometry.Vector2d
 import kotlin.math.abs
@@ -35,25 +34,23 @@ import kotlin.math.abs
  *
  * @param hwMap The hardware map of the robot
  */
-class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
+open class Robot(val opmode: LinearOpMode) {
 
     // Hardware Components
-    var FL: DcMotorEx
-    var FR: DcMotorEx
-    var BL: DcMotorEx
-    var BR: DcMotorEx
+    private var FL: DcMotorEx
+    private var FR: DcMotorEx
+    private var BL: DcMotorEx
+    private var BR: DcMotorEx
 
-    var driveMotors: Array<DcMotorEx>
+    private var driveMotors: Array<DcMotorEx>
 
-    var LAUNCHER: Component
+    var components: ArrayList<Component> = ArrayList()
 
-    var components: Array<Component>
+    private var IMU: BNO055IMU
 
-    var IMU: BNO055IMU
-
-    val trackWidth = 12.0
-    val wheelBase = 8.5
-    val lateralMultiplier = 1.1
+    private val trackWidth = 12.0
+    private val wheelBase = 8.5
+    private val lateralMultiplier = 1.1
 
     private var distanceTarget: Double = 0.0
     private var distanceError: Double = 0.0
@@ -68,9 +65,9 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
 
     private var headingCorrection: Double = 0.0
 
-    var lastAngle: Double = botHeading
+    private var lastAngle: Double = botHeading
 
-    var globalAngle: Double = botHeading
+    private var globalAngle: Double = botHeading
 
     private var hasBeenRun = true
 
@@ -142,11 +139,15 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
 
     private var hardwareMap: HardwareMap? = null
 
-    var headingPIDController = PIDController(heading_kP, heading_kI, heading_kD)
-    var turnPIDController = PIDController(turn_kP, turn_kI, turn_kD)
-    var drivePIDController = PIDController(drive_kP, drive_kI, drive_kD)
+    private var headingPIDController = PIDController(heading_kP, heading_kI, heading_kD)
+    private var turnPIDController = PIDController(turn_kP, turn_kI, turn_kD)
+    private var drivePIDController = PIDController(drive_kP, drive_kI, drive_kD)
 
-    val localiser = MecanumLocaliser(this)
+    private val localiser = MecanumLocaliser(this)
+
+    fun getMotor(name: String): DcMotorEx {
+        return hardwareMap!!.get(DcMotorEx::class.java, name)
+    }
 
     private fun tDrive(drive: Double, turn: Double){
         FL.power = drive + turn
@@ -154,7 +155,7 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
         BL.power = drive + turn
         BR.power = drive - turn
 
-        update()
+        autoUpdate()
     }
 
     fun RCDrive(y: Double, x: Double, rx: Double) {
@@ -174,7 +175,7 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
         FR.power = rightFrontPower
         BR.power = rightBackPower
 
-        update()
+        autoUpdate()
     }
 
     fun FCDrive(y: Double, x: Double, turn: Double) {
@@ -187,17 +188,27 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
         RCDrive(input.y, input.x, turn)
     }
 
-    fun gamepadDrive(controller: Gamepad, multiplier: Double) {
+    fun gamepadDrive(multiplier: Double) {
         FCDrive(
-            -controller.left_stick_y.toDouble() * multiplier,
-            controller.left_stick_x.toDouble() * multiplier,
-            controller.right_stick_x.toDouble() * multiplier
+            -opmode.gamepad1.left_stick_y.toDouble() * multiplier,
+            opmode.gamepad1.left_stick_x.toDouble() * multiplier,
+            opmode.gamepad1.right_stick_x.toDouble() * multiplier
         )
         autoMode = MANUAL
-        update()
+        autoUpdate()
     }
 
     fun update() {
+        autoUpdate()
+        updateComponents()
+        opmode.telemetry.update()
+    }
+
+    private fun updateComponents() {
+        components.forEach { it.update() }
+    }
+
+    private fun autoUpdate() {
         when (autoMode) {
             UNKNOWN -> {
                 stop()
@@ -262,7 +273,7 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
 
         headingTarget = botHeading
 
-        update()
+        autoUpdate()
     }
 
     fun turnRight(angle: Int = -90){
@@ -276,7 +287,7 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
 
         prepareMotors()
 
-        update()
+        autoUpdate()
     }
 
     fun turnLeft(angle: Int = 90){
@@ -290,7 +301,7 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
 
         prepareMotors()
 
-        update()
+        autoUpdate()
     }
     fun rumble(controller: Gamepad, side: Side, power: RumbleStrength, duration: Int = 100) {
         val pwr = power.strength
@@ -345,7 +356,7 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
 
 
     init {
-        hardwareMap = hwMap
+        hardwareMap = opmode.hardwareMap
 
         /* Set up hardware */
 
@@ -355,14 +366,6 @@ class Robot(hwMap: HardwareMap?, opMode: LinearOpMode) {
         BR = hardwareMap!!.get(DcMotorEx::class.java, "BR")
 
         driveMotors = arrayOf(FL, FR, BL, BR)
-
-
-
-        LAUNCHER = Launcher(hardwareMap!!.get(DcMotorEx::class.java, "LAUNCHER"))
-
-        components = arrayOf(LAUNCHER)
-
-
 
         IMU = hardwareMap!!.get(BNO055IMU::class.java, "imu")
 

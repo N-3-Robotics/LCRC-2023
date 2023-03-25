@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.robot
 
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import org.firstinspires.ftc.teamcode.utilities.Component
 
-class Launcher(private val motor: DcMotorEx): Component {
+class Launcher(val robot: N3Robot): Component {
+
+    private var motor: DcMotorEx = robot.getMotor("LAUNCHER")
 
     var power: Double
         get() = motor.power
@@ -11,11 +14,13 @@ class Launcher(private val motor: DcMotorEx): Component {
         }
 
     override fun update() {
-        this.power = calculatePower(0.0) // #TODO: Implement
-        motor.power = this.power
+        if (robot.opmode.gamepad1.right_trigger.toDouble() > 0.0) {
+            power = calculatePower(0.0)
+        }
     }
 
     private fun calculatePower(distance: Double): Double {
         return 0.0 // #TODO: Implement
     }
+
 }
