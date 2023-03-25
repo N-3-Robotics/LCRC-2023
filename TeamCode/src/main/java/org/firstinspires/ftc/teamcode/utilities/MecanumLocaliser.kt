@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.robot
+package org.firstinspires.ftc.teamcode.utilities
 
-import org.firstinspires.ftc.teamcode.robot.kinematics.Kinematics
-import org.firstinspires.ftc.teamcode.robot.kinematics.MecanumKinematics
-import org.firstinspires.ftc.teamcode.utilities.Robot
+import org.firstinspires.ftc.teamcode.utilities.kinematics.Kinematics
+import org.firstinspires.ftc.teamcode.utilities.kinematics.MecanumKinematics
 import org.firstinspires.ftc.teamcode.utilities.geometry.Pose2d
 import org.firstinspires.ftc.teamcode.utilities.math.Angle
 
-class MecanumLocaliser(private val robot: Robot, private val useExternalHeading: Boolean = true): Localiser {
+class MecanumLocaliser(private val robot: Robot, private val useExternalHeading: Boolean = true):
+    Localiser {
     private var _poseEstimate = Pose2d()
     override var poseEstimate: Pose2d
         get() = _poseEstimate

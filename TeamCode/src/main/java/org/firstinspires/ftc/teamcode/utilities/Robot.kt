@@ -5,8 +5,7 @@ import com.acmerobotics.robomatic.util.PIDController
 import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.*
-import org.firstinspires.ftc.teamcode.robot.MecanumLocaliser
-import org.firstinspires.ftc.teamcode.robot.kinematics.MecanumKinematics
+import org.firstinspires.ftc.teamcode.utilities.kinematics.MecanumKinematics
 import org.firstinspires.ftc.teamcode.utilities.AutoMode.*
 import org.firstinspires.ftc.teamcode.utilities.DriveConstants.AutoDriveTolerance
 import org.firstinspires.ftc.teamcode.utilities.DriveConstants.AutoTurnTolerance

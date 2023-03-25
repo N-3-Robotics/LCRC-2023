@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot.kinematics
+package org.firstinspires.ftc.teamcode.utilities.kinematics
 
 import org.firstinspires.ftc.teamcode.utilities.geometry.Pose2d
 import org.firstinspires.ftc.teamcode.utilities.geometry.Vector2d
