@@ -33,8 +33,6 @@ class TeleOP: LinearOpMode() {
             telemetry.addData("Loop Time", timer.milliseconds())
             timer.reset()
 
-
-
             // Drivetrain Control
             ROBOT.gamepadDrive(m)
 

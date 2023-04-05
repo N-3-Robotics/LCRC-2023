@@ -148,6 +148,14 @@ open class Robot(val opmode: LinearOpMode) {
         return hardwareMap!!.get(DcMotorEx::class.java, name)
     }
 
+    fun getServo(name: String): Servo {
+        return hardwareMap!!.get(Servo::class.java, name)
+    }
+
+    fun getCRServo(name: String): CRServo {
+        return hardwareMap!!.get(CRServo::class.java, name)
+    }
+
     private fun tDrive(drive: Double, turn: Double){
         FL.power = drive + turn
         FR.power = drive - turn
